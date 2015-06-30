@@ -1,34 +1,93 @@
-use iworkCREATE TABLE [teacher] (
+USE classDesignCREATE TABLE [teacher] (
 [id] int NOT NULL,
 [name] varchar(255) NOT NULL,
 [passwd] varchar(255) NOT NULL,
-CONSTRAINT [PK__account__3213E83FDE6A7A07] PRIMARY KEY ([id]) 
+PRIMARY KEY ([id]) 
 )
 GO
+/*
+IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
+'SCHEMA', N'', 
+'TABLE', N'teacher', 
+'COLUMN', N'id')) > 0) 
+EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'工号'
+, @level0type = 'SCHEMA', @level0name = N''
+, @level1type = 'TABLE', @level1name = N'teacher'
+, @level2type = 'COLUMN', @level2name = N'id'
+ELSE
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'工号'
+, @level0type = 'SCHEMA', @level0name = N''
+, @level1type = 'TABLE', @level1name = N'teacher'
+, @level2type = 'COLUMN', @level2name = N'id'
+GO*/
 
 CREATE TABLE [class] (
 [id] int NOT NULL,
-CONSTRAINT [PK__class__3213E83F13A31EB6] PRIMARY KEY ([id]) 
+PRIMARY KEY ([id]) 
 )
 GO
+/*
+IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
+'SCHEMA', N'', 
+'TABLE', N'class', 
+'COLUMN', N'id')) > 0) 
+EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'班级号'
+, @level0type = 'SCHEMA', @level0name = N''
+, @level1type = 'TABLE', @level1name = N'class'
+, @level2type = 'COLUMN', @level2name = N'id'
+ELSE
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'班级号'
+, @level0type = 'SCHEMA', @level0name = N''
+, @level1type = 'TABLE', @level1name = N'class'
+, @level2type = 'COLUMN', @level2name = N'id'
+GO*/
 
 CREATE TABLE [commit] (
 [id] int IDENTITY(1,1) NOT NULL,
 [committer_id] int NOT NULL,
 [course_id] int NOT NULL,
-[rank] varchar(255) NOT NULL,
 [commit_text] varchar(255) NOT NULL,
-CONSTRAINT [PK__commit__3213E83F50F2A591] PRIMARY KEY ([id]) 
+PRIMARY KEY ([id]) 
 )
 GO
+/*
+IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
+'SCHEMA', N'', 
+'TABLE', N'commit', 
+'COLUMN', N'id')) > 0) 
+EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'自增'
+, @level0type = 'SCHEMA', @level0name = N''
+, @level1type = 'TABLE', @level1name = N'commit'
+, @level2type = 'COLUMN', @level2name = N'id'
+ELSE
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'自增'
+, @level0type = 'SCHEMA', @level0name = N''
+, @level1type = 'TABLE', @level1name = N'commit'
+, @level2type = 'COLUMN', @level2name = N'id'
+GO*/
 
 CREATE TABLE [course] (
 [id] int IDENTITY(1,1) NOT NULL,
 [name] varchar(50) NOT NULL,
 [teacher_id] int NOT NULL,
-CONSTRAINT [PK__course__3213E83F7B0FE674] PRIMARY KEY ([id]) 
+PRIMARY KEY ([id]) 
 )
 GO
+/*
+IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
+'SCHEMA', N'', 
+'TABLE', N'course', 
+'COLUMN', N'id')) > 0) 
+EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'自增'
+, @level0type = 'SCHEMA', @level0name = N''
+, @level1type = 'TABLE', @level1name = N'course'
+, @level2type = 'COLUMN', @level2name = N'id'
+ELSE
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'自增'
+, @level0type = 'SCHEMA', @level0name = N''
+, @level1type = 'TABLE', @level1name = N'course'
+, @level2type = 'COLUMN', @level2name = N'id'
+GO*/
 
 CREATE TABLE [major] (
 [class_id] int NOT NULL,
@@ -42,9 +101,24 @@ CREATE TABLE [student] (
 [class_id] int NOT NULL,
 [name] varchar(255) NOT NULL,
 [passwd] varchar(255) NOT NULL,
-CONSTRAINT [PK__account__3213E83FDE6A7A08] PRIMARY KEY ([id]) 
+PRIMARY KEY ([id]) 
 )
 GO
+/*
+IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
+'SCHEMA', N'', 
+'TABLE', N'student', 
+'COLUMN', N'id')) > 0) 
+EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'学号'
+, @level0type = 'SCHEMA', @level0name = N''
+, @level1type = 'TABLE', @level1name = N'student'
+, @level2type = 'COLUMN', @level2name = N'id'
+ELSE
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'学号'
+, @level0type = 'SCHEMA', @level0name = N''
+, @level1type = 'TABLE', @level1name = N'student'
+, @level2type = 'COLUMN', @level2name = N'id'
+GO*/
 
 CREATE TABLE [extra] (
 [student_id] int NOT NULL,
@@ -52,6 +126,36 @@ CREATE TABLE [extra] (
 PRIMARY KEY ([student_id], [course_id]) 
 )
 GO
+
+CREATE TABLE [ranks] (
+[commit_id] int NOT NULL,
+[items_id] int NOT NULL,
+[rank] tinyint NOT NULL,
+PRIMARY KEY ([items_id], [commit_id]) 
+)
+GO
+
+CREATE TABLE [rank_items] (
+[id] int IDENTITY(1,1) NOT NULL,
+[text] varchar(255) NOT NULL,
+PRIMARY KEY ([id]) 
+)
+GO
+/*
+IF ((SELECT COUNT(*) from fn_listextendedproperty('MS_Description', 
+'SCHEMA', N'', 
+'TABLE', N'rank_items', 
+'COLUMN', N'id')) > 0) 
+EXEC sp_updateextendedproperty @name = N'MS_Description', @value = N'自增'
+, @level0type = 'SCHEMA', @level0name = N''
+, @level1type = 'TABLE', @level1name = N'rank_items'
+, @level2type = 'COLUMN', @level2name = N'id'
+ELSE
+EXEC sp_addextendedproperty @name = N'MS_Description', @value = N'自增'
+, @level0type = 'SCHEMA', @level0name = N''
+, @level1type = 'TABLE', @level1name = N'rank_items'
+, @level2type = 'COLUMN', @level2name = N'id'
+GO*/
 
 
 ALTER TABLE [commit] ADD CONSTRAINT [fk_commit_course_2] FOREIGN KEY ([course_id]) REFERENCES [course] ([id])
@@ -69,5 +173,9 @@ GO
 ALTER TABLE [extra] ADD CONSTRAINT [fk_extra_course_1] FOREIGN KEY ([course_id]) REFERENCES [course] ([id])
 GO
 ALTER TABLE [commit] ADD CONSTRAINT [fk_commit_student_1] FOREIGN KEY ([committer_id]) REFERENCES [student] ([id])
+GO
+ALTER TABLE [ranks] ADD CONSTRAINT [fk_ranks_commit_1] FOREIGN KEY ([commit_id]) REFERENCES [commit] ([id])
+GO
+ALTER TABLE [ranks] ADD CONSTRAINT [fk_ranks_items_1] FOREIGN KEY ([items_id]) REFERENCES [rank_items] ([id])
 GO
 

@@ -11,5 +11,11 @@
     "url": "https://github.com/fry95116/class_design"
   },
   "author": "testycarb",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.13.1",
+    "express": "^4.13.0",
+    "lodash": "^3.9.3",
+    "mssql": "^2.1.6"
+  }
 }
