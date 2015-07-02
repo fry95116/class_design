@@ -1,13 +1,3 @@
 body{
-	background-color: #efefef;
-}
-
-.panel{
-	height:400px;
-}
-
-@media (max-width:992px) {
-	.panel{
-		height:220px;
-	}
+	background-color: #66ccff;
 }
