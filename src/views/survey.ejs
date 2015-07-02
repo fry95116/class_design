@@ -1,0 +1,13 @@
+<%for(var i=0;i<rank_items.length;i++){%>
+	<p class="item"><%= i+1 %>.<%= rank_items[i].text %></p>
+	<p class ="option">
+		<%for(var j=0;j<rank.length;j++){%>
+			<label class="radio-inline">
+				<input type="radio" name="<%= rank_items[i].id %>" value="<%=rank[j].value%>"><%=rank[j].text%>
+			</label>
+		<%}%>
+	</p>
+<%}%>
+<p><label for="text">Commit Text</label></p>
+<textarea class="form-control" rows="5" name="text" placeholder="Say something,not necessary."></textarea>
+<p><input class="btn btn-success" type="submit" value="Commit"></p>

@@ -1,3 +1,20 @@
+/*********************登陆检查*************************/
+create proc checkLogin
+	@uid int,
+	@pwd varchar(255)
+as
+	if exists(select passwd from student where id=@uid)
+		if ((select passwd from student where id=@uid)=@pwd)
+			select 1 status;
+		else
+			select 0 status;
+	else if exists(select passwd from teacher where id=@uid)
+		if ((select passwd from teacher where id=@uid)=@pwd)
+			select 2 status;
+		else
+			select 0 status;
+	else
+		select 0 status;
 /*********************调查项目管理*************************/
 /******添加*******/
 create proc addRankItem 
