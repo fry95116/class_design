@@ -50,33 +50,31 @@ app.post('/getCourse',function(req,res){
 			if(result.length!=0){
 				//检查失败
 				if(result[0].status==0){
-					re_data.res={};
-					re_data.err='failed';
-					res.send(re_data);
+					//res.render('course',result);
+					res.send('failed');
 				}
 				//作为学生
 				else if(result[0].status==1){
 					request.query('exec getCourseByStudentId '+req.body.id,function(err,result){
 						if(err) console.log(err);
-						re_data.res=result;
-						res.send(re_data);
+						//res.render('course',result);
+						res.send('failed');
 					});
 				}
 				//作为教师
 				else if(result[0].status==2){
 					request.query('exec getCourseByTeacherId '+req.body.id,function(err,result){
 						if(err) console.log(err);
-						re_data.res=result;
-						res.send(re_data);
+						//res.render('course',result);
+						res.send('failed');
 					});
 				}
 			}
 		});
 	}
 	else{
-		re_data.res={};
-		re_data.err='invaild data';
-		res.send(re_data);
+
+		//res.render('course',result);
 	}
 });
 

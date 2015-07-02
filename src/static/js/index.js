@@ -5,6 +5,10 @@ $(document).ready(function(){
 				$('#survey').html(data);
 			}
 		});
+		$.post('/getCourse',$(this).serialize(),function(data,status){
+			console.log(data);
+			console.log(status);
+		})
 		return false;
 	});
 });
