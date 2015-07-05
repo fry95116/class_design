@@ -38,7 +38,7 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">My Course</h3>
 					</div>
-					<ul class="list-group" id="class_list">
+					<ul class="list-group" id="course_list">
 						<li class="list-group-item">NO DATA</li>
 					</ul>
 				</div>
@@ -48,14 +48,28 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">title</h3>
 					</div>
-					<form id="survey" method="post" action="comit" class="panel-body">
+					<form id="survey" method="post" action="commit" class="panel-body">
 						<p class="error">NO DATA</p>
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-
+	<script type="text\template">
+		<%for(var i=0;i<rank_items.length;i++){%>
+			<p class="item"><%= i+1 %>.<%= rank_items[i].text %></p>
+			<p class ="option">
+				<%for(var j=0;j<rank.length;j++){%>
+					<label class="radio-inline">
+						<input type="radio" name="<%=rank_items[i].id%>" value="<%=rank[j].value%>"><%=rank[j].text%>
+					</label>
+				<%}%>
+			</p>
+		<%}%>
+		<p><label for="text">Commit Text</label></p>
+		<textarea class="form-control" rows="5" name="text" placeholder="Say something,not necessary."></textarea>
+		<p><input id="submit" class="btn btn-success" type="submit" value="Commit"></p>
+	</script>
 	<script src="/js/jquery.js"></script>
 	<script src="/js/bootstrap.js"></script>
 	<script src="/js/underscore.js"></script>

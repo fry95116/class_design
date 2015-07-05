@@ -1,4 +1,4 @@
-/*********************µÇÂ½¼ì²é*************************/
+/*********************ç™»é™†æ£€æŸ¥*************************/
 create proc checkLogin
 	@uid int,
 	@pwd varchar(255)
@@ -15,34 +15,34 @@ as
 			select 0 status;
 	else
 		select 0 status;
-/*********************µ÷²éÏîÄ¿¹ÜÀí*************************/
-/******Ìí¼Ó*******/
+/*********************è°ƒæŸ¥é¡¹ç›®ç®¡ç†*************************/
+/******æ·»åŠ *******/
 create proc addRankItem 
 	@text varchar(255)
 as
 	insert into rank_items ([text]) values (@text);
 GO
-/******É¾³ı*******/
+/******åˆ é™¤*******/
 create proc deleteRankItem 
 	@rid int
 as
 	delete from rank_items where id=@rid;
 GO
-/******ĞŞ¸Ä*******/
+/******ä¿®æ”¹*******/
 create proc updateRankItem
 	@rid int,
 	@text varchar(255)
 as
 	update rank_items set [text]=@text where id=@rid;
 GO
-/******²éÑ¯*******/
+/******æŸ¥è¯¢*******/
 create proc getRankItems
 as
 	select * from rank_items;
 GO
 
-/*********************Ñ§ÉúÆÀ¼Û¿Î³Ì*************************/
-/******²éÑ¯ËùÑ¡¿Î³Ì*******/
+/*********************å­¦ç”Ÿçš„åŠŸèƒ½*************************/
+/******æŸ¥è¯¢æ‰€é€‰è¯¾ç¨‹*******/
 create proc getCourseByStudentid 
 	@sid int
 as
@@ -60,15 +60,34 @@ as
 	on course.id=extra.course_id 
 	where student_id=@sid
 GO
-/******ÆÀÂÛËùÑ¡¿Î³Ì*******/
+/******è¯„è®ºæ‰€é€‰è¯¾ç¨‹*******/
 create proc commitCourse 
 	@committer_id int,
 	@course_id int,
 	@text varchar(255)=''
 as
-	insert into [commit] (committer_id,course_id,commit_text) values (@committer_id,@course_id,@text);
+	if exists(select * from [commit] where committer_id=@committer_id AND course_id=@course_id)
+		UPDATE [commit] SET committer_id=@committer_id,course_id=@course_id,commit_text=@text
+			WHERE committer_id=@committer_id AND course_id=@course_id
+	else
+		insert into [commit] (committer_id,course_id,commit_text) values (@committer_id,@course_id,@text);
 GO
-/*
+/******æ·»åŠ è¯„çº§*******/
+create proc [addRank] 
+	@sid int,
+	@cid int,
+	@items_id int,
+	@rank int
+as
+	declare @commit_id int;
+	select @commit_id=id from [commit] where committer_id=@sid AND course_id=@cid;
+	if exists(select * from [ranks] where commit_id=@commit_id AND items_id=@items_id)
+		UPDATE [ranks] SET commit_id=@commit_id,items_id=@items_id,[rank]=@rank
+			WHERE commit_id=@commit_id AND items_id=@items_id
+	else
+		insert into [ranks] (commit_id,items_id,[rank]) values (@commit_id,@items_id,@rank);
+/*********************æ•™å¸ˆçš„åŠŸèƒ½*************************/
+/******æŸ¥è¯¢æ‰€æ•™è¯¾ç¨‹*******/
 create proc getCourseByteacherid 
 	@tid int
 as
@@ -76,9 +95,15 @@ as
 	from course  
 	where teacher_id=@tid;
 GO
-
+/******æŸ¥è¯¢æ–‡å­—è¯„ä»·*******/
 create proc getcommitByCourseId
 	@cid int
 as
-	select * from [commit] where course_id=@cid;
-GO*/
+	select [commit_text] from [commit] where course_id=@cid;
+GO
+/********æŸ¥è¯¢è¯„çº§*********/
+create proc getRankCountByCourseId
+	@cid int
+as
+	select [rank],count([rank]) as 'count' from [commit] join ranks on [commit].id=ranks.commit_id where course_id=@cid group by [rank];
+GO

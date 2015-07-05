@@ -1,0 +1,3 @@
+<%for(i=0;i<course.length;i++){%>
+	<li class="list-group-item <%if(i==0){%>active<%}%>" cid=<%= course[i].id %>><%= course[i].name %></li>
+<%}%>
