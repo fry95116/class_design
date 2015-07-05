@@ -2,7 +2,8 @@ var express = require('express'),
 	bodyparser = require('body-parser'),
 	mssql = require('mssql'),
 	app = express(),
-	http = require('http');
+	http = require('http'),
+	_=require('lodash');
 /******************** **  数据库部分  **********************/
 var config = {
 	user: 'sa',
@@ -42,6 +43,7 @@ app.get('/', function (req, res) {
 //登陆检查
 app.use(['/getCourse', '/getInfo','/commit','/getCommits'], function (req, res, next) {
 	//post参数检查，检查是否建立连接
+	console.log(req.body);
 	if (request != null
 		&& req.body.id
 		&& req.body.id !== ''
@@ -197,8 +199,22 @@ output:{
 */
 app.post('/getCommits',function(req,res){
 	//登录检查
-	if(req.loginCheck==2){
-		
+	//
+	var re_data={},count=0;
+	console.log(req.loginCheck);
+	if(req.loginCheck==2&&typeof(req.body.cid) != "undefined"){
+		request.query('exec getCommitByCourseId '+req.body.cid,function(err,result){
+			count++;
+			if(err){re_data.err=err;}
+			re_data.texts=result;
+			if(count==2) res.send(re_data);
+		});
+		request.query('exec getRankCountByCourseId '+req.body.cid,function(err,result){
+			count++;
+			if(err){re_data.err=err;}
+			re_data.items=_.map(_.groupBy(result,'text'),function(num,key){return {text:key,ranks:num}});
+			if(count==2) res.send(re_data);
+		});
 	}
 });
 

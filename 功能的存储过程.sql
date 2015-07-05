@@ -105,5 +105,10 @@ GO
 create proc getRankCountByCourseId
 	@cid int
 as
-	select [rank],count([rank]) as 'count' from [commit] join ranks on [commit].id=ranks.commit_id where course_id=@cid group by [rank];
+	select rank_items.[text],[rank],count([rank]) as count from [commit] 
+	join ranks on [commit].id=ranks.commit_id
+	join rank_items on rank_items.id=items_id
+	where course_id=@cid
+	group by rank_items.[text],[rank],items_id
+	order by items_id;
 GO

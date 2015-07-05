@@ -60,6 +60,14 @@ $(document).ready(function () {
 						}
 					});
 				}
+				//如果是教师账号
+				if(data.loginAs==='teacher'){
+					$.post('/getCommits',$('#user_info').serialize()+'&cid=4',function(data,status){
+						if(status==='success'){
+							d=data;
+						}
+					})
+				}
 			}
 		});
 		return false;
