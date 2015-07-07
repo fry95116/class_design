@@ -19,6 +19,69 @@
 	};
 })(jQuery);
 
+var options = {
+	title: {
+		show: true,
+		text: '4.4',
+		x: 'center',
+		textStyle: {fontSize: 24}
+	},
+    tooltip: {
+        trigger: 'item',
+        formatter: "{b} : {c} ({d}%)"
+    },
+    calculable: true,
+    series: [
+        {
+            type: 'pie',
+            radius: ['50%', '70%'],
+			itemStyle: {
+                normal: {
+                    label: {show: true},
+                    labelLine: {show: true}
+                },
+                emphasis: {
+                    label: {show: false}
+                }
+            },
+            data: [
+                { value: 1, name: 'a' }
+            ]
+        }
+    ]
+};
+
+/*var subChartOptions = option = {
+	title: {
+		show: true,
+		text: '4.4',
+		x: 'center',
+	},
+    tooltip: {
+        trigger: 'item',
+        formatter: "{b} : {c} ({d}%)"
+    },
+    calculable: true,
+    series: [
+        {
+            type: 'pie',
+            radius: '55%',
+			itemStyle: {
+                normal: {
+                    label: { show: false },
+                    labelLine: { show: false }
+                },
+                emphasis: {
+                    label: { show: false }
+                }
+            },
+            data: [
+                { value: 1, name: 'a' }
+            ]
+        }
+    ]
+};     */
+
 $(document).ready(function () {
 	//用户验证
 	$('#user_info').submit(function () {
@@ -62,11 +125,49 @@ $(document).ready(function () {
 				}
 				//如果是教师账号
 				if(data.loginAs==='teacher'){
-					$.post('/getCommits',$('#user_info').serialize()+'&cid=4',function(data,status){
+					cl.children().click(function(){
+						$.post('/getCommits',$('#user_info').serialize()+'&cid='+$(this).attr('cid'),function(data,status){
+							if(status==='success'){
+								$('#survey').empty();
+								for(i=0;i<data.items.length;i++){
+									$('#survey').append('<div class="subChart"></div>');
+								}
+								$('#survey').append('<div style="clear:both;">');
+								$('.subChart').width(($('#survey').width()-5)*0.5).height(($('#survey').width()-5)*0.5);
+								sc=_.map($('.subChart'),function(d){return echarts.init(d)});
+								for(i=0;i<sc.length;i++){
+									sc[i].setOption(options);
+									sc[i].setOption({title:{text:data.items[i].text}});
+									var series=[{data:_.map(data.items[i].ranks,function(iter){
+										return {name:data.tr_rank[iter.rank-1],value:iter.count}
+									})}];
+									sc[i].setSeries(series);
+								}
+								var commit_panel='<div class="panel panel-default"><div class="panel-heading">Commit for my course</div><div class="list-group">'
+								for(i=0;i<data.texts.length;i++){
+									commit_panel+=' <a href="#" class="list-group-item">'+data.texts[i].commit_text+'</a>';
+								}
+								$('#survey').append(commit_panel+'</div></div>');
+							}
+						});
+					});
+					cl.children().first().trigger('click');
+					/*$.post('/getCommits',$('#user_info').serialize()+'&cid=4',function(data,status){
 						if(status==='success'){
-							d=data;
+							//数据处理
+							var d=data,sub={};
+							_.each(d.items,function(data){
+							    _.each(data.ranks,function(sd){
+									if(typeof(sub[sd.rank])==='undefined'){
+										sub[sd.rank]=sd.count;
+									}else{
+										sub[sd.rank]+=sd.count
+									}
+								});
+							});
+							console.log(sub);
 						}
-					})
+					});*/
 				}
 			}
 		});

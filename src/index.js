@@ -30,7 +30,7 @@ connection.connect(function (err) {
 /************************  中间件  *************************/
 //评级等级
 var rank = [{ value: 1, text: '差' }, { value: 2, text: '中' }, { value: 3, text: '良' }, { value: 4, text: '好' }];
-
+var tr_rank=['差','中','良','好'];
 app.set("view engine", "ejs");
 app.set("view options", { "layout": false });
 app.use(bodyparser.urlencoded({ extended: true })); //post请求
@@ -190,10 +190,14 @@ input:id,pwd,cid
 output:{
 	items:(array)[{
 		text:(string),
+		sub:(array)[
+			{rank_text:(string),count(int)}
+		],
 		ranks:(array)[
-			{rank:(int),count:(int)}
+			{rank_text:(string),count:(int)}
 		]
 	}],
+	tr_rank(array)[(string)],
 	texts[(string)]
 }
 */
@@ -207,13 +211,19 @@ app.post('/getCommits',function(req,res){
 			count++;
 			if(err){re_data.err=err;}
 			re_data.texts=result;
-			if(count==2) res.send(re_data);
+			if(count==2){
+				re_data.tr_rank=tr_rank;
+				res.send(re_data);
+			}
 		});
 		request.query('exec getRankCountByCourseId '+req.body.cid,function(err,result){
 			count++;
 			if(err){re_data.err=err;}
 			re_data.items=_.map(_.groupBy(result,'text'),function(num,key){return {text:key,ranks:num}});
-			if(count==2) res.send(re_data);
+			if(count==2){
+				re_data.tr_rank=tr_rank;
+				res.send(re_data);
+			}
 		});
 	}
 });

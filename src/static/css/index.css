@@ -2,7 +2,14 @@ body{
 	font-family: "微软雅黑";
 }
 
+.container{
+	width:960px;
+}
 #survey p{
 	margin:15px auto;
 	font-size:16px;
+}
+
+#survey .subChart{
+	float:left;
 }
